@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker - Add Transaction</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Deep Earthy Theme - No White */
+            --bg-color: #1e1e1e;
+            --card-color: #2a2a2a;
+            --text-color: #e0e0e0;
+            --text-secondary: #9e9e9e;
+            --header-color: #d4af37;
+            --primary-color: #8b5a2b;
+            --primary-light: #a67c52;
+            --button-color: #8b5a2b;
+            --button-hover: #6d4521;
+            --button-secondary: #3d3d3d;
+            --button-secondary-hover: #4d4d4d;
+            --income-color: #4caf50;
+            --expense-color: #f44336;
+            --border-color: #3d3d3d;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+        }
+
+        [data-theme="light"] {
+            /* Light Earthy Alternative - Still No Pure White */
+            --bg-color: #f5f5f0;
+            --card-color: #e8e5da;
+            --text-color: #333333;
+            --text-secondary: #666666;
+            --header-color: #8b5a2b;
+            --primary-color: #a67c52;
+            --primary-light: #c19a6b;
+            --button-color: #8b5a2b;
+            --button-hover: #6d4521;
+            --button-secondary: #d5d5c3;
+            --button-secondary-hover: #c5c5b3;
+            --income-color: #388e3c;
+            --expense-color: #d32f2f;
+            --border-color: #c5c5b3;
+            --shadow: 0 4px 12px rgba(139, 90, 43, 0.15);
+            --shadow-lg: 0 8px 24px rgba(139, 90, 43, 0.2);
+            --success-color: #388e3c;
+            --warning-color: #f57c00;
+            --danger-color: #d32f2f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            color: var(--header-color);
+            font-family: 'Quicksand', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            width: 100%;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
+            color: var(--header-color);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--header-color);
+            margin: 0;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .checkbox {
+            opacity: 0;
+            position: absolute;
+        }
+
+        .checkbox-label {
+            background-color: #111;
+            width: 50px;
+            height: 26px;
+            border-radius: 50px;
+            position: relative;
+            padding: 5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fa-moon {color: #d4af37;}
+        .fa-sun {color: #fbc02d;}
+
+        .checkbox-label .ball {
+            background-color: #fff;
+            width: 22px;
+            height: 22px;
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            border-radius: 50%;
+            transition: transform 0.2s linear;
+        }
+
+        .checkbox:checked + .checkbox-label .ball {
+            transform: translateX(24px);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 25px;
+            background-color: var(--card-color);
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 8px 12px;
+            border-radius: 8px;
+            background-color: transparent;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            flex: 1;
+            min-width: 0;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .nav-tab.active {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-tab:hover:not(.active) {
+            background-color: var(--button-secondary);
+            color: var(--text-color);
+        }
+
+        .nav-tab i {
+            font-size: 1rem;
+        }
+
+        .card {
+            background-color: var(--card-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            width: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card h2 i {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .form-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .form-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: inherit;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(139, 90, 43, 0.2);
+        }
+
+        .category-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .category-selector select {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .category-selector .btn-small {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--button-color);
+            color: var(--text-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: var(--shadow);
+        }
+
+        .btn:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: var(--button-secondary);
+            color: var(--text-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--button-secondary-hover);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+        }
+
+        .btn-small {
+            padding: 8px 12px;
+            font-size: 0.8rem;
+        }
+
+        .recurring-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .recurring-toggle label {
+            margin-bottom: 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--button-secondary);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--card-color);
+            color: var(--text-color);
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            max-width: calc(100% - 40px);
+            width: fit-content;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .toast.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .toast-icon {
+            font-size: 1rem;
+        }
+
+        .toast.success .toast-icon {
+            color: var(--success-color);
+        }
+
+        .toast.warning .toast-icon {
+            color: var(--warning-color);
+        }
+
+        .toast.error .toast-icon {
+            color: var(--danger-color);
+        }
+
+        .toast-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .toast-message {
+            font-size: 0.85rem;
+            margin-bottom: 2px;
+            word-break: break-word;
+        }
+
+        .toast-action {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 0;
+            margin-left: 8px;
+            white-space: nowrap;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 8px;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .modal.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background-color: var(--card-color);
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 450px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(-50px);
+            transition: transform 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.3rem;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-btn:hover {
+            color: var(--text-color);
+            background-color: var(--button-secondary);
+        }
+
+        .categories-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+            width: 100%;
+        }
+
+        .category-tag {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        .delete-category-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .delete-category-btn:hover {
+            color: var(--danger-color);
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+                padding: 15px 0;
+            }
+            
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .nav-tabs {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 5px;
+                padding: 6px;
+            }
+            
+            .nav-tab {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+                flex-grow: 1;
+                text-align: center;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .nav-tabs {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 5px;
+                padding: 6px;
+            }
+            
+            .nav-tab {
+                padding: 8px 5px;
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+            
+            .modal-content {
+                width: 100%;
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 375px) {
+            .nav-tabs {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tab {
+                padding: 8px 5px;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-wallet logo-icon"></i>
+                    <h1>Expense Tracker</h1>
+                </div>
+            </div>
+            <div class="header-right">
+                <input type="checkbox" class="checkbox" id="themeToggleCheckbox">
+                <label for="themeToggleCheckbox" class="checkbox-label">
+                    <i class="fas fa-moon"></i>
+                    <i class="fas fa-sun"></i>
+                    <span class="ball"></span>
+                </label>
+            </div>
+        </header>
+
+        <div class="nav-tabs">
+            <a href="index.html" class="nav-tab">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="add-transaction.html" class="nav-tab active">
+                <i class="fas fa-plus-circle"></i> Add
+            </a>
+            <a href="transactions.html" class="nav-tab">
+                <i class="fas fa-list"></i> Transactions
+            </a>
+            <a href="reports.html" class="nav-tab">
+                <i class="fas fa-chart-pie"></i> Reports
+            </a>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-plus-circle"></i> Add Transaction</h2>
+            </div>
+            <form id="transactionForm" class="form-container">
+                <div class="form-group">
+                    <label for="amount">Amount (₹)</label>
+                    <input type="number" id="amount" placeholder="Enter amount" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <input type="text" id="description" placeholder="Enter description" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="type">Type</label>
+                    <select id="type" required>
+                        <option value="">Select type</option>
+                        <option value="income">Income</option>
+                        <option value="expense">Expense</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <div class="category-selector">
+                        <select id="category" required>
+                            <option value="">Select category</option>
+                        </select>
+                        <button type="button" id="addCategoryBtn" class="btn btn-secondary btn-small">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="recurring-toggle">
+                    <label for="recurring">Repeat Monthly</label>
+                    <label class="switch">
+                        <input type="checkbox" id="recurring">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <button type="submit" class="btn">
+                        <i class="fas fa-plus"></i> Add Transaction
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-message" id="toastMessage"></div>
+        </div>
+        <button class="toast-action" id="toastAction" style="display: none;"></button>
+        <button class="toast-close" id="toastClose">&times;</button>
+    </div>
+
+    <div class="modal" id="categoriesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-tags"></i> Manage Categories</h2>
+                <button class="close-btn" id="closeCategoriesModal">&times;</button>
+            </div>
+            <form id="addCategoryForm" class="category-form">
+                <div class="form-group">
+                    <input type="text" id="newCategory" placeholder="New category name" required>
+                </div>
+                <button type="submit" class="btn">
+                    <i class="fas fa-plus"></i> Add Category
+                </button>
+            </form>
+            <div class="categories-list" id="categoriesList">
+                <p style="text-align: center; color: var(--text-secondary); width: 100%;">No custom categories added yet</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio elements for sounds -->
+    <audio id="incomeSound" src="income_sound.mp3" preload="auto"></audio>
+    <audio id="expenseSound" src="expense_sound.mp3" preload="auto"></audio>
+
+    <script>
+        // DOM Elements
+        const themeToggleCheckbox = document.getElementById('themeToggleCheckbox');
+        const transactionForm = document.getElementById('transactionForm');
+        const amountInput = document.getElementById('amount');
+        const descriptionInput = document.getElementById('description');
+        const dateInput = document.getElementById('date');
+        const typeInput = document.getElementById('type');
+        const categoryInput = document.getElementById('category');
+        const recurringInput = document.getElementById('recurring');
+        const addCategoryBtn = document.getElementById('addCategoryBtn');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+        const toastAction = document.getElementById('toastAction');
+        const toastClose = document.getElementById('toastClose');
+        const categoriesModal = document.getElementById('categoriesModal');
+        const closeCategoriesModal = document.getElementById('closeCategoriesModal');
+        const addCategoryForm = document.getElementById('addCategoryForm');
+        const newCategory = document.getElementById('newCategory');
+        const categoriesList = document.getElementById('categoriesList');
+        const incomeSound = document.getElementById('incomeSound');
+        const expenseSound = document.getElementById('expenseSound');
+
+        // Categories
+        const incomeCategories = ['Salary', 'Bonus', 'Freelance', 'Investment', 'Gift', 'Other Income'];
+        const expenseCategories = ['Food', 'Transport', 'Entertainment', 'Rent', 'Utilities', 'Shopping', 'Healthcare', 'Education', 'Other Expense'];
+        let customCategories = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+            
+            // Load data from localStorage
+            loadData();
+            
+            // Populate type dropdown
+            populateTypeCategories();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Check URL for type parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const type = urlParams.get('type');
+            if (type === 'income' || type === 'expense') {
+                typeInput.value = type;
+                updateCategoryDropdown();
+            }
+        });
+
+        // Load data from localStorage
+        function loadData() {
+            // Load theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                themeToggleCheckbox.checked = true;
+            }
+            
+            // Load custom categories
+            const savedCategories = localStorage.getItem('customCategories');
+            if (savedCategories) {
+                customCategories = JSON.parse(savedCategories);
+            }
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('customCategories', JSON.stringify(customCategories));
+        }
+
+        // Generate unique ID
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // Populate type categories
+        function populateTypeCategories() {
+            typeInput.innerHTML = '<option value="">Select type</option>';
+            typeInput.innerHTML += '<option value="income">Income</option>';
+            typeInput.innerHTML += '<option value="expense">Expense</option>';
+        }
+
+        // Update category dropdown based on selected type
+        function updateCategoryDropdown() {
+            const type = typeInput.value;
+            categoryInput.innerHTML = '<option value="">Select category</option>';
+            
+            if (type === 'income') {
+                incomeCategories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    categoryInput.appendChild(option);
+                });
+            } else if (type === 'expense') {
+                expenseCategories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    categoryInput.appendChild(option);
+                });
+            }
+            
+            // Add custom categories
+            customCategories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryInput.appendChild(option);
+            });
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success', actionText = '', actionHandler = null) {
+            // Set icon based on type
+            let icon;
+            switch(type) {
+                case 'success':
+                    icon = 'fa-check-circle';
+                    break;
+                case 'warning':
+                    icon = 'fa-exclamation-triangle';
+                    break;
+                case 'error':
+                    icon = 'fa-times-circle';
+                    break;
+                default:
+                    icon = 'fa-info-circle';
+            }
+            
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i class="fas ${icon} toast-icon"></i>
+                <div class="toast-content">
+                    <div class="toast-message">${message}</div>
+                </div>
+                ${actionText ? `<button class="toast-action">${actionText}</button>` : ''}
+                <button class="toast-close">&times;</button>
+            `;
+            
+            // Add action handler if provided
+            if (actionText && actionHandler) {
+                const actionBtn = toast.querySelector('.toast-action');
+                actionBtn.onclick = actionHandler;
+            }
+            
+            // Add close handler
+            toast.querySelector('.toast-close').onclick = () => {
+                toast.classList.remove('show');
+            };
+            
+            toast.classList.add('show');
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 5000);
+        }
+
+        // Show categories modal
+        function showCategoriesModal() {
+            categoriesModal.classList.add('show');
+            renderCategoriesList();
+        }
+
+        // Render categories list
+        function renderCategoriesList() {
+            categoriesList.innerHTML = '';
+            
+            if (customCategories.length === 0) {
+                categoriesList.innerHTML = '<p style="text-align: center; color: var(--text-secondary); width: 100%;">No custom categories added yet</p>';
+                return;
+            }
+            
+            customCategories.forEach(category => {
+                const categoryTag = document.createElement('div');
+                categoryTag.className = 'category-tag';
+                categoryTag.innerHTML = `
+                    <i class="fas fa-tag"></i> ${category}
+                    <button class="delete-category-btn" data-category="${category}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                categoriesList.appendChild(categoryTag);
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-category-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const category = e.currentTarget.dataset.category;
+                    deleteCategory(category);
+                });
+            });
+        }
+
+        // Add category
+        function addCategory(e) {
+            e.preventDefault();
+            
+            const category = newCategory.value.trim();
+            
+            // Validate
+            if (!category) {
+                showToast('Please enter a category name', 'error');
+                return;
+            }
+            
+            // Check if category already exists in any list
+            if ([...incomeCategories, ...expenseCategories, ...customCategories].includes(category)) {
+                showToast('Category already exists', 'error');
+                return;
+            }
+            
+            // Add category
+            customCategories.push(category);
+            
+            // Save to localStorage
+            saveData();
+            
+            // Update dropdown
+            updateCategoryDropdown();
+            
+            // Update UI
+            renderCategoriesList();
+            
+            // Reset form
+            newCategory.value = '';
+            
+            // Show success message
+            showToast('Category added successfully');
+        }
+
+        // Delete category
+        function deleteCategory(category) {
+            // Remove category
+            customCategories = customCategories.filter(c => c !== category);
+            
+            // Save to localStorage
+            saveData();
+            
+            // Update dropdown
+            updateCategoryDropdown();
+            
+            // Update UI
+            renderCategoriesList();
+            
+            // Show success message
+            showToast('Category deleted successfully');
+        }
+
+        // Add new transaction
+        function addTransaction(e) {
+            e.preventDefault();
+            
+            const transaction = {
+                id: generateId(),
+                amount: parseFloat(amountInput.value),
+                description: descriptionInput.value.trim(),
+                date: dateInput.value,
+                type: typeInput.value,
+                category: categoryInput.value,
+                recurring: recurringInput.checked
+            };
+            
+            // Validate
+            if (!transaction.amount || !transaction.description || !transaction.type || !transaction.category) {
+                showToast('Please fill all fields', 'error');
+                return;
+            }
+            
+            if (transaction.amount <= 0) {
+                showToast('Amount must be greater than 0', 'error');
+                return;
+            }
+            
+            // Get existing transactions from localStorage
+            let transactions = [];
+            const savedTransactions = localStorage.getItem('transactions');
+            if (savedTransactions) {
+                transactions = JSON.parse(savedTransactions);
+            }
+            
+            // Add to transactions array
+            transactions.push(transaction);
+            
+            // Save to localStorage
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            
+            // Reset form
+            transactionForm.reset();
+            dateInput.value = new Date().toISOString().split('T')[0];
+            
+            // Play sound based on transaction type
+            if (transaction.type === 'income') {
+                incomeSound.play().catch(e => console.log('Income audio playback failed:', e));
+            } else {
+                expenseSound.play().catch(e => console.log('Expense audio playback failed:', e));
+            }
+            
+            // Show success message
+            showToast('Transaction added successfully');
+            
+            // Redirect to dashboard after 1 second
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Theme toggle
+            themeToggleCheckbox.addEventListener('change', () => {
+                const isLight = themeToggleCheckbox.checked;
+                
+                if (isLight) {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+            
+            // Type change listener
+            typeInput.addEventListener('change', updateCategoryDropdown);
+            
+            // Add transaction form
+            transactionForm.addEventListener('submit', addTransaction);
+            
+            // Add category button
+            addCategoryBtn.addEventListener('click', showCategoriesModal);
+            
+            // Close modal
+            closeCategoriesModal.addEventListener('click', () => {
+                categoriesModal.classList.remove('show');
+            });
+            
+            // Click outside modal to close
+            window.addEventListener('click', (e) => {
+                if (e.target === categoriesModal) {
+                    categoriesModal.classList.remove('show');
+                }
+            });
+            
+            // Add category form
+            addCategoryForm.addEventListener('submit', addCategory);
+        }
+    </script>
+</body>
+</html>
